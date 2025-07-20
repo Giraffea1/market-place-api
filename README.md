@@ -93,6 +93,14 @@ The app will start on `http://localhost:8080`
 
 ## API Endpoints
 
+### 0. Test public endpoint:
+
+It shouldn't require any authentication
+
+```bash
+curl -X GET http://localhost:8080/api/public
+```
+
 ### 1. User Registration
 
 **POST** `/api/auth/register`
@@ -123,10 +131,31 @@ curl -X POST http://localhost:8080/api/auth/login \
   }'
 ```
 
-### 3. Test public endpoint:
-
-It shouldn't require any authentication
+### 3. Get User Profile (Requires Auth)
 
 ```bash
-curl -X GET http://localhost:8080/api/public
+# Replace YOUR_JWT_TOKEN with the token from login response
+curl -X GET http://localhost:8080/api/users/profile \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+### 4. Update User Profile (Requires Auth)
+
+```bash
+curl -X PUT http://localhost:8080/api/users/profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "firstName": "Updated",
+    "lastName": "Name",
+    "email": "updated@example.com",
+    "phoneNumber": "987-654-3210"
+  }'
+```
+
+### 5. Delete User Account (Requires Auth)
+
+```bash
+curl -X DELETE http://localhost:8080/api/users/profile \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
