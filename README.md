@@ -16,6 +16,14 @@ This is the API for marketplace application that allows users to buy and sell it
 - PostgreSQL 12 or higher
 - Maven 3.6 or higher
 
+## Security Features
+
+1. **Password Encryption:** Passwords are encrypted using BCrypt
+2. **JWT Tokens:** Stateless authentication using JWT
+3. **Input Validation:** Request validation using Bean Validation
+4. **Role-based Access:** Support for USER, ADMIN, and SELLER roles
+5. **CORS:** Cross-origin requests are enabled for development
+
 ## Database Setup
 
 ### 1. Install PostgreSQL
@@ -55,6 +63,12 @@ The application is configured to connect to:
 - **Username:** postgres
 - **Password:** password
 
+## Error Handling
+
+- **400 Bad Request:** Invalid input data or validation errors
+- **401 Unauthorized:** Invalid credentials or missing token
+- **403 Forbidden:** Insufficient permissions
+
 ## Running the Application
 
 ### 1. Clone the Repository
@@ -78,3 +92,41 @@ git clone https://github.com/Giraffea1/market-place-api.git
 The app will start on `http://localhost:8080`
 
 ## API Endpoints
+
+### 1. User Registration
+
+**POST** `/api/auth/register`
+
+```bash
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "email": "test@example.com",
+    "password": "password123",
+    "firstName": "Test",
+    "lastName": "User",
+    "phoneNumber": "123-456-7890"
+  }'
+```
+
+### 2. User Login
+
+**POST** `/api/auth/login`
+
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "testuser",
+    "password": "password123"
+  }'
+```
+
+### 3. Test public endpoint:
+
+It shouldn't require any authentication
+
+```bash
+curl -X GET http://localhost:8080/api/public
+```
