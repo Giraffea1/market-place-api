@@ -70,9 +70,7 @@ public class PostController {
 
     //search for post by query, id, and tag
     @GetMapping("/search")
-    public ResponseEntity<List<PostResponse>> searchPost(@RequestParam(required = false) String query,
-                                                        @RequestParam(required =  false) Long userId,
-                                                        @RequestParam(required = false) String tag) {
+    public ResponseEntity<List<PostResponse>> searchPost(@RequestParam(required = false) String query, @RequestParam(required =  false) Long userId, @RequestParam(required = false) String tag) {
         return ResponseEntity.ok(postService.searchPosts(query, userId, tag));
     }
 
