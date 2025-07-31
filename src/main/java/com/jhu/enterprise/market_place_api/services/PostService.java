@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -98,10 +99,10 @@ public class PostService {
 
         User admin = (User) authentication.getPrincipal();
         if(!admin.getRole().equals(Role.ADMIN)){
-            throw new org.springframework.security.access.AccessDeniedException("Only admins can delete");
+            throw new AccessDeniedException("Only admins can perform this action");
         }
         
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found")); 
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found with id: "+ id)); 
         String postTitle = post.getTitle();
         postRepository.delete(post);
         return "Deleted successfully: Post ID " + id + " - " + postTitle; 

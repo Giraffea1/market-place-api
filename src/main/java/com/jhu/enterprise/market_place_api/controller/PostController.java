@@ -1,6 +1,6 @@
 package com.jhu.enterprise.market_place_api.controller;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -74,9 +74,7 @@ public class PostController {
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<Map<String, String>> adminDeletePost(@PathVariable Long id, Authentication authentication){
         String result = postService.adminDelete(id, authentication);
-        Map<String, String> response = new HashMap<>(); 
-        response.put("message", result); 
-        return ResponseEntity.ok(response); 
+        return ResponseEntity.ok(Collections.singletonMap("message", result)); 
     }
 
     //search for post by query, id, and tag
