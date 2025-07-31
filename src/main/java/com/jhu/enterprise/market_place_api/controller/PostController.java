@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jhu.enterprise.market_place_api.dto.PostRequest;
 import com.jhu.enterprise.market_place_api.dto.PostResponse;
+import com.jhu.enterprise.market_place_api.dto.PostSearchRequest;
 import com.jhu.enterprise.market_place_api.services.PostService;
 
 import jakarta.validation.Valid;
@@ -28,46 +30,41 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/posts")
 @CrossOrigin(origins = "*")
 public class PostController {
-    
+
     @Autowired
     private PostService postService;
 
-
-    //Get all post
-    @GetMapping
-    public ResponseEntity<List<PostResponse>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
-    }
-
-    //Get post by Id
+    // Get post by Id
     @GetMapping("/{id}")
     public ResponseEntity<PostResponse> getPostbyId(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getPostbyId(id));
     }
 
-    //Create Post
+    // Create Post
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest postRequest, Authentication authentication){
+    public ResponseEntity<PostResponse> createPost(@Valid @RequestBody PostRequest postRequest,
+            Authentication authentication) {
         return ResponseEntity.ok(postService.createPost(postRequest, authentication));
     }
 
-    //update post
+    // update post
     @PutMapping("/{id}")
-    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @Valid @RequestBody PostRequest postRequest, Authentication authentication) {
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @Valid @RequestBody PostRequest postRequest,
+            Authentication authentication) {
         return ResponseEntity.ok(postService.updatePost(id, postRequest, authentication));
     }
 
-    //mark and item as sold
+    // mark and item as sold
     @PutMapping("/{id}/sold")
     public ResponseEntity<PostResponse> markPostAsSold(@PathVariable Long id, Authentication authentication) {
         return ResponseEntity.ok(postService.markPostAsSold(id, authentication));
     }
 
-    //delete a post
+    // delete a post
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id, Authentication authentication) {
         postService.deletePost(id, authentication);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Post deleted successfully");
     }
 
     //Admin can delete post
@@ -77,9 +74,26 @@ public class PostController {
         return ResponseEntity.ok(Collections.singletonMap("message", result)); 
     }
 
-    //search for post by query, id, and tag
+    // Get recent posts (paginated)
+    @GetMapping
+    public ResponseEntity<Page<PostResponse>> getRecentPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(postService.getRecentPosts(page, size));
+    }
+
+    // Search posts (unified search endpoint)
     @GetMapping("/search")
-    public ResponseEntity<List<PostResponse>> searchPost(@RequestParam(required = false) String query, @RequestParam(required =  false) Long userId, @RequestParam(required = false) String tag) {
-        return ResponseEntity.ok(postService.searchPosts(query, userId, tag));
+    public ResponseEntity<Page<PostResponse>> searchPosts(PostSearchRequest request) {
+        return ResponseEntity.ok(postService.searchPosts(request));
+    }
+
+    // Get posts by user (paginated)
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Page<PostResponse>> getPostsByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(postService.getPostsByUser(userId, page, size));
     }
 }
