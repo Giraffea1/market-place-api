@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.jhu.enterprise.market_place_api.dto.PostRequest;
 import com.jhu.enterprise.market_place_api.dto.PostResponse;
 import com.jhu.enterprise.market_place_api.model.Post;
+import com.jhu.enterprise.market_place_api.model.Role;
 import com.jhu.enterprise.market_place_api.model.User;
 import com.jhu.enterprise.market_place_api.repository.PostRepository;
 import com.jhu.enterprise.market_place_api.repository.UserRepository;
@@ -92,13 +93,26 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    //delete post as an admin
+    public String adminDelete(Long id, Authentication authentication){
+
+        User admin = (User) authentication.getPrincipal();
+        if(!admin.getRole().equals(Role.ADMIN)){
+            throw new org.springframework.security.access.AccessDeniedException("Only admins can delete");
+        }
+        
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found")); 
+        String postTitle = post.getTitle();
+        postRepository.delete(post);
+        return "Deleted successfully: Post ID " + id + " - " + postTitle; 
+    }
+
     public List<PostResponse> searchPosts(String query, Long userId, String tag) {
         return postRepository.searchPosts(query, userId, tag).stream().map(PostResponse::new).collect(Collectors.toList());
     }
 
     public List<PostResponse> getUsersPosts(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-
         return postRepository.findBySeller(user).stream().map(PostResponse::new).collect(Collectors.toList());
     }
 

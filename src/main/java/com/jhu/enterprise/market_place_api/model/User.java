@@ -1,18 +1,28 @@
 package com.jhu.enterprise.market_place_api.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -57,7 +67,8 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    @Column(nullable= false)
+    private Role role;
 
     private boolean enabled = true;
 
@@ -75,12 +86,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String email, String password, String firstName, String lastName) {
+    public User(String username, String email, String password, String firstName, String lastName, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role; 
     }
 
     @Override

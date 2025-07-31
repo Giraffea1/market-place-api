@@ -1,6 +1,8 @@
 package com.jhu.enterprise.market_place_api.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -68,14 +70,18 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
+    //Admin can delete post
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Map<String, String>> adminDeletePost(@PathVariable Long id, Authentication authentication){
+        String result = postService.adminDelete(id, authentication);
+        Map<String, String> response = new HashMap<>(); 
+        response.put("message", result); 
+        return ResponseEntity.ok(response); 
+    }
+
     //search for post by query, id, and tag
     @GetMapping("/search")
     public ResponseEntity<List<PostResponse>> searchPost(@RequestParam(required = false) String query, @RequestParam(required =  false) Long userId, @RequestParam(required = false) String tag) {
         return ResponseEntity.ok(postService.searchPosts(query, userId, tag));
     }
-
-    // @GetMapping("/user/{userId}")
-    // public ResponseEntity<List<PostResponse>> getUserPosts(@PathVariable Long userId) {
-    //     return ResponseEntity.ok(postService.getUsersPosts(userId));
-    // }
 }
