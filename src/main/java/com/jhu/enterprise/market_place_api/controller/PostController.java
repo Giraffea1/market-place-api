@@ -62,7 +62,7 @@ public class PostController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id, Authentication authentication) {
         postService.deletePost(id, authentication);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Post deleted successfully");
     }
 
     // Get recent posts (paginated)

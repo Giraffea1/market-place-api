@@ -22,6 +22,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         // Get posts by seller
         Page<Post> findBySellerIdOrderByCreatedAtDesc(Long sellerId, Pageable pageable);
 
+        // Get posts by seller with status filter
+        Page<Post> findBySellerIdAndStatusOrderByCreatedAtDesc(Long sellerId, PostStatus status, Pageable pageable);
+
         // Search by title and description
         @Query("SELECT p FROM Post p WHERE p.status = :status AND " +
                         "(LOWER(p.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +

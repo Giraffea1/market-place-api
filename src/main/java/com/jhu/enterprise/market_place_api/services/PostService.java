@@ -140,10 +140,11 @@ public class PostService {
         return getRecentPosts(request.getPage(), request.getSize());
     }
 
-    // Get posts by user
+    // Get posts by user (public view - only AVAILABLE posts)
     public Page<PostResponse> getPostsByUser(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Post> postPage = postRepository.findBySellerIdOrderByCreatedAtDesc(userId, pageable);
+        Page<Post> postPage = postRepository.findBySellerIdAndStatusOrderByCreatedAtDesc(userId, PostStatus.AVAILABLE,
+                pageable);
         return postPage.map(PostResponse::new);
     }
 }

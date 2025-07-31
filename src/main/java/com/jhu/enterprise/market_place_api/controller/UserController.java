@@ -1,8 +1,11 @@
 package com.jhu.enterprise.market_place_api.controller;
 
+import com.jhu.enterprise.market_place_api.dto.PostResponse;
+import com.jhu.enterprise.market_place_api.dto.MyPostResponse;
 import com.jhu.enterprise.market_place_api.dto.UserUpdateRequest;
 import com.jhu.enterprise.market_place_api.model.User;
 import com.jhu.enterprise.market_place_api.services.UserService;
+import org.springframework.data.domain.Page;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,15 @@ public class UserController {
     public ResponseEntity<?> deleteProfile(Authentication authentication) {
         User currentUser = (User) authentication.getPrincipal();
         userService.deleteUser(currentUser.getId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<Page<MyPostResponse>> getMyPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(userService.getMyPosts(currentUser.getId(), page, size));
     }
 }
