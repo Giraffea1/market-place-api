@@ -1,18 +1,18 @@
 package com.jhu.enterprise.market_place_api.services;
 
-import com.jhu.enterprise.market_place_api.dto.AuthResponse;
-import com.jhu.enterprise.market_place_api.dto.LoginRequest;
-import com.jhu.enterprise.market_place_api.dto.RegisterRequest;
-import com.jhu.enterprise.market_place_api.model.Role;
-import com.jhu.enterprise.market_place_api.model.User;
-import com.jhu.enterprise.market_place_api.repository.UserRepository;
-import com.jhu.enterprise.market_place_api.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.jhu.enterprise.market_place_api.dto.AuthResponse;
+import com.jhu.enterprise.market_place_api.dto.LoginRequest;
+import com.jhu.enterprise.market_place_api.dto.RegisterRequest;
+import com.jhu.enterprise.market_place_api.model.User;
+import com.jhu.enterprise.market_place_api.repository.UserRepository;
+import com.jhu.enterprise.market_place_api.security.JwtUtils;
 
 @Service
 public class AuthService {
@@ -46,7 +46,7 @@ public class AuthService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(Role.USER);
+        user.setRole(request.getRole());
 
         User savedUser = userRepository.save(user);
 

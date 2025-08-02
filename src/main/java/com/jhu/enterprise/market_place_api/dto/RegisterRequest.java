@@ -1,7 +1,10 @@
 package com.jhu.enterprise.market_place_api.dto;
 
+import com.jhu.enterprise.market_place_api.model.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -28,14 +31,18 @@ public class RegisterRequest {
 
     private String phoneNumber;
 
+    @NotNull(message= "ADMIN or USER")
+    private Role role;
+
     public RegisterRequest() {
     }
 
-    public RegisterRequest(String username, String email, String password, String firstName, String lastName) {
+    public RegisterRequest(String username, String email, String password, String firstName, String lastName, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.role = role;
     }
 }
