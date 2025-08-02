@@ -252,3 +252,22 @@ curl -X PUT http://localhost:8080/api/posts/1 \
 curl -X DELETE http://localhost:8080/api/posts/1 \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
+
+## API Documentation
+
+### Swagger UI
+
+Once the application is running, you can access the interactive API documentation at:
+
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+
+### Using Swagger UI for Testing
+
+1. Start the application: `./mvnw spring-boot:run`
+2. Open http://localhost:8080/swagger-ui/index.html in your browser
+3. For authenticated endpoints:
+   - Click the "Authorize" button at the top
+   - Enter your JWT token in the format: `Bearer YOUR_TOKEN_HERE`(You can get token by using the signin api endpoint)
+   - Click "Authorize"
+4. Test any endpoint by clicking "Try it out"
