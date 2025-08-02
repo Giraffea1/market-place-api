@@ -102,14 +102,25 @@ public class PostController {
         postService.deletePost(id, authentication);
         return ResponseEntity.ok("Post deleted successfully");
     }
-    //Admin can delete post
+
+    @Operation(summary = "Delete post", description = "Deletes a post (Admin only)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Post deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - requires authentication"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - not the admin")
+    })
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/admin/{id}")
     public ResponseEntity<Map<String, String>> adminDeletePost(@PathVariable Long id, Authentication authentication){
         String result = postService.adminDelete(id, authentication);
         return ResponseEntity.ok(Collections.singletonMap("message", result)); 
     }
 
-    // Get recent posts (paginated)
+    @Operation(summary = "Get recent posts", description = "Retrieves paginated list of recent available posts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Posts retrieved successfully", content = @Content(schema = @Schema(implementation = PostResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid pagination parameters")
+    })
     @GetMapping
     public ResponseEntity<Page<PostResponse>> getRecentPosts(
             @RequestParam(defaultValue = "0") int page,
