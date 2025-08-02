@@ -1,5 +1,8 @@
 package com.jhu.enterprise.market_place_api.controller;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -98,6 +101,12 @@ public class PostController {
     public ResponseEntity<?> deletePost(@PathVariable Long id, Authentication authentication) {
         postService.deletePost(id, authentication);
         return ResponseEntity.ok("Post deleted successfully");
+    }
+    //Admin can delete post
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Map<String, String>> adminDeletePost(@PathVariable Long id, Authentication authentication){
+        String result = postService.adminDelete(id, authentication);
+        return ResponseEntity.ok(Collections.singletonMap("message", result)); 
     }
 
     // Get recent posts (paginated)
