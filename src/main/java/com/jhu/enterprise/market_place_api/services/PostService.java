@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import com.jhu.enterprise.market_place_api.dto.PostResponse;
 import com.jhu.enterprise.market_place_api.dto.PostSearchRequest;
 import com.jhu.enterprise.market_place_api.model.Post;
 import com.jhu.enterprise.market_place_api.model.Post.PostStatus;
+import com.jhu.enterprise.market_place_api.model.Role;
 import com.jhu.enterprise.market_place_api.model.User;
 import com.jhu.enterprise.market_place_api.repository.PostRepository;
 import com.jhu.enterprise.market_place_api.repository.UserRepository;
@@ -96,6 +98,20 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    //delete post as an admin
+    public String adminDelete(Long id, Authentication authentication){
+
+        User admin = (User) authentication.getPrincipal();
+        if(!admin.getRole().equals(Role.ADMIN)){
+            throw new AccessDeniedException("Only admins can perform this action");
+        }
+        
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found with id: "+ id)); 
+        String postTitle = post.getTitle();
+        postRepository.delete(post);
+        return "Deleted successfully: Post ID " + id + " - " + postTitle; 
     }
 
     // Get recent posts

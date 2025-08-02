@@ -116,7 +116,8 @@ curl -X POST http://localhost:8080/api/auth/register \
     "password": "password123",
     "firstName": "Test",
     "lastName": "User",
-    "phoneNumber": "123-456-7890"
+    "phoneNumber": "123-456-7890", 
+    "role": "User" //Can choose between User and Admin
   }'
 ```
 
@@ -161,7 +162,6 @@ curl -X PUT http://localhost:8080/api/users/profile \
 curl -X DELETE http://localhost:8080/api/users/profile \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
-
 #### 6. Get My Posts (Owner View - Requires Auth)
 
 ```bash
@@ -250,5 +250,11 @@ curl -X PUT http://localhost:8080/api/posts/1 \
 
 ```bash
 curl -X DELETE http://localhost:8080/api/posts/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+#### 14. Delete Post - ADMIN Role (Owner Only)
+
+```bash
+curl -X DELETE http://localhost:8080/api/posts/admin/post/{id} \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
