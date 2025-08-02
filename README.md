@@ -139,7 +139,7 @@ curl -X POST http://localhost:8080/api/auth/login \
 ```bash
 # Replace YOUR_JWT_TOKEN with the token from login response
 curl -X GET http://localhost:8080/api/users/profile \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+-H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 #### 4. Update User Profile (Requires Auth)
@@ -160,13 +160,13 @@ curl -X PUT http://localhost:8080/api/users/profile \
 
 ```bash
 curl -X DELETE http://localhost:8080/api/users/profile \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+-H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 #### 6. Get My Posts (Owner View - Requires Auth)
 
 ```bash
 curl -X GET "http://localhost:8080/api/users/posts?page=0&size=10" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+-H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ### Post Search Endpoints
@@ -250,11 +250,56 @@ curl -X PUT http://localhost:8080/api/posts/1 \
 
 ```bash
 curl -X DELETE http://localhost:8080/api/posts/1 \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+-H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 #### 14. Delete Post - ADMIN Role (Owner Only)
-
 ```bash
 curl -X DELETE http://localhost:8080/api/posts/admin/post/{id} \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+-H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
+
+### Messages Functionality
+#### 15. Send a message
+```bash
+curl -X POST http://localhost:8080/api/messages \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_JWT_TOKEN" \
+-d '{
+    "postId": 1,
+    "receiverID": 2,
+    "content": "Test message without auth"
+}'
+```
+
+### 16. Get Message by Post 
+```bash
+curl -X GET http://localhost:8080/api/messages/posts/{id} \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_JWT_TOKEN" \
+```
+
+### 17. Get Full Conversation
+```bash
+curl -X GET http://localhost:8080/api/messages/post/{postId}/conversation/{userId} \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer YOUR_JWT_TOKEN" \
+```
+
+## API Documentation
+
+### Swagger UI
+
+Once the application is running, you can access the interactive API documentation at:
+
+- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+
+### Using Swagger UI for Testing
+
+1. Start the application: `./mvnw spring-boot:run`
+2. Open http://localhost:8080/swagger-ui/index.html in your browser
+3. For authenticated endpoints:
+   - Click the "Authorize" button at the top
+   - Enter your JWT token in the format: `Bearer YOUR_TOKEN_HERE`(You can get token by using the signin api endpoint)
+   - Click "Authorize"
+4. Test any endpoint by clicking "Try it out"

@@ -56,6 +56,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
+            // Clear context for invalid tokens on protected endpoints
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
