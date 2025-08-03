@@ -118,14 +118,12 @@ Once the application is running, you can access the interactive API documentatio
 chmod +x test_api.py
 ```
 
-# On macOS
-
 ```bash
+# On macOS
 pip install requests colorama
 ```
 
-# run the script
-
 ```bash
+# run the script
 python ./test_api.py
 ```
