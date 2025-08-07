@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "Market Place API is running! Visit /swagger-ui.html for API documentation.";
+        return "Market Place API is running! Visit /swagger-ui/index.html for API documentation.";
     }
 
     @GetMapping("/health")
