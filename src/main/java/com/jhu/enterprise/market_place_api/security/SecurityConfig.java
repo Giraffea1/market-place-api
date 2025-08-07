@@ -34,6 +34,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/").permitAll() // Allow root path
+                        .requestMatchers("/health").permitAll() // Allow health endpoint
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
@@ -72,10 +74,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public RoleHierarchy roleHierarchy(){
-        RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl(); 
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchyImpl = new RoleHierarchyImpl();
         String hierachy = "Role_ADMIN > Role_USER";
         roleHierarchyImpl.setHierarchy(hierachy);
-        return roleHierarchyImpl; 
+        return roleHierarchyImpl;
     }
 }
